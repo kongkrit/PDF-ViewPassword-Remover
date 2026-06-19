@@ -2,7 +2,7 @@
 
 A client-side-only web app that removes the open password from a PDF you already have access to. The file never leaves your browser.
 
-**Live:** [kongkrit.github.io/PDF-Unlocker](https://kongkrit.github.io/PDF-Unlocker) *(update once deployed)*
+**Live:** [kongkrit.github.io/PDF-Unlocker](https://kongkrit.github.io/PDF-Unlocker)
 
 ## How it works
 
@@ -21,13 +21,27 @@ Decryption runs entirely in a Web Worker via [qpdf](https://qpdf.sourceforge.io/
 - **Installable PWA** — works fully offline after first visit; WASM vendored locally, no CDN at runtime
 - **GitHub Pages compatible** — relative paths throughout; works under a repo subpath
 
+## Install as app (PWA)
+
+The app can be installed locally and works fully offline after the first visit.
+
+| Platform | How |
+|---|---|
+| **Windows** | Open in Edge or Chrome → address bar install icon (⊕) or ⋯ menu → "Install PDF Unlocker" |
+| **macOS** | Open in Chrome/Edge → address bar install icon, or ⋯ menu → "Install PDF Unlocker" |
+| **macOS Safari** | Share button → "Add to Dock" |
+| **iPhone / iPad** | Open in Safari → Share → "Add to Home Screen" |
+| **Android** | Open in Chrome → ⋮ menu → "Add to Home screen" |
+
+Once installed, the app launches in its own window with no browser chrome, and decrypts PDFs with no internet connection.
+
 ## Technical notes
 
 | Concern | Approach |
 |---|---|
 | PDF engine | `qpdf --decrypt` (object-level; bytes preserved, no re-render) |
 | Threading | `qpdf-wasm` v0.3.0 is single-threaded — no `SharedArrayBuffer`/COOP/COEP needed |
-| Worker | `new Worker('./worker.js', { type: 'module' })` keeps the main thread unblocked |
+| Worker | Classic `Worker` (qpdf.js is UMD, not ESM) — keeps the main thread unblocked |
 | Offline | Service worker precaches all assets including `.wasm` on install; cache-first at fetch |
 | Instance lifetime | `callMain` calls `exit()` internally — a fresh module is instantiated per file |
 
