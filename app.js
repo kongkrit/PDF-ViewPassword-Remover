@@ -124,7 +124,11 @@ fileInput.addEventListener('change', () => {
   fileInput.value = '';
 });
 
-passwordInput.addEventListener('input', tryAutoUnlock);
+let debounceTimer;
+passwordInput.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(tryAutoUnlock, 400);
+});
 unlockBtn.addEventListener('click', doUnlock);
 
 if ('serviceWorker' in navigator) {
