@@ -79,4 +79,4 @@ Push to `main` — the [Pages workflow](.github/workflows/pages.yml) deploys aut
 
 ## License
 
-MIT
+AGPL-3.0
