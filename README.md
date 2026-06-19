@@ -1,29 +1,20 @@
 # PDF Unlocker
 
-A client-side-only web app that removes the open password from a PDF you already have access to. The file never leaves your browser.
-
-**Live:** [kongkrit.github.io/PDF-Unlocker](https://kongkrit.github.io/PDF-Unlocker)
-
-## How it works
-
-1. Drop a PDF (or click to pick one)
-2. Enter the password
-3. The unlocked file downloads automatically as `<name>-unlocked.pdf`
-
-Decryption runs entirely in a Web Worker via [qpdf](https://qpdf.sourceforge.io/) compiled to WebAssembly (`@neslinesli93/qpdf-wasm`). No server. No upload. No tracking.
+Remove the open password from a PDF you already have access to. **Nothing leaves your device.**
 
 ## Features
 
+- **Totally offline** — works with no internet after first visit; WASM engine vendored locally, no CDN
+- **No re-rendering** — uses `qpdf --decrypt` (object-level strip); bytes are preserved exactly
+- **No server, no upload, no tracking** — decryption runs in a Web Worker in your browser
 - **Drag-and-drop or click to select** — both work
-- **Auto-trigger** — decryption starts as soon as a file and password are both present
-- **Permissions-only PDFs** — leave the password blank; `--decrypt` removes owner restrictions without an open password
-- **Clear errors** — wrong password, corrupt file, and qpdf errors are all surfaced distinctly
-- **Installable PWA** — works fully offline after first visit; WASM vendored locally, no CDN at runtime
-- **GitHub Pages compatible** — relative paths throughout; works under a repo subpath
+- **Auto-trigger** — decryption starts 400ms after you stop typing the password
+- **Permissions-only PDFs** — leave the password blank to remove owner restrictions only
+- **Dark / light theme** — toggle top-right; preference saved
 
 ## Install as app (PWA)
 
-The app can be installed locally and works fully offline after the first visit.
+Installs to your device and works fully offline — no browser needed after install.
 
 | Platform | How |
 |---|---|
@@ -33,7 +24,17 @@ The app can be installed locally and works fully offline after the first visit.
 | **iPhone / iPad** | Open in Safari → Share → "Add to Home Screen" |
 | **Android** | Open in Chrome → ⋮ menu → "Add to Home screen" |
 
-Once installed, the app launches in its own window with no browser chrome, and decrypts PDFs with no internet connection.
+## Use online
+
+**[kongkrit.github.io/PDF-Unlocker](https://kongkrit.github.io/PDF-Unlocker)**
+
+No install needed. Works in any modern browser.
+
+## How it works
+
+1. Drop a PDF (or click to pick one)
+2. Enter the password
+3. The unlocked file downloads automatically as `<name>-unlocked.pdf`
 
 ## Technical notes
 
@@ -66,15 +67,13 @@ icons/
 
 ## Local development
 
-No build step. Serve the repo root over HTTP (required for ES modules and the service worker):
+No build step. Serve the repo root over HTTP:
 
 ```bash
-npx serve .
-# or
-python3 -m http.server
+python3 -m http.server 8080
 ```
 
-Open `http://localhost:3000` (or whatever port). HTTPS is not required on localhost for SW registration.
+Open `http://localhost:8080` in **incognito** (avoids stale service worker cache during dev).
 
 ## Deploy
 
