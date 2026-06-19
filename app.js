@@ -1,3 +1,14 @@
+const DARK = 'dark', LIGHT = 'light';
+let theme = localStorage.getItem('theme') || DARK;
+function applyTheme(t) {
+  theme = t;
+  document.documentElement.dataset.theme = t === LIGHT ? LIGHT : '';
+  document.getElementById('theme-toggle').textContent = t === DARK ? '☀' : '🌙';
+  localStorage.setItem('theme', t);
+}
+applyTheme(theme);
+document.getElementById('theme-toggle').addEventListener('click', () => applyTheme(theme === DARK ? LIGHT : DARK));
+
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const passwordInput = document.getElementById('password');
