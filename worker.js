@@ -1,10 +1,10 @@
-import createModule from './vendor/qpdf/qpdf.js';
+importScripts('./vendor/qpdf/qpdf.js');
 
 self.onmessage = async ({ data: { bytes, password, name } }) => {
   let stderr = '';
   try {
-    const qpdf = await createModule({
-      locateFile: () => new URL('./vendor/qpdf/qpdf.wasm', import.meta.url).href,
+    const qpdf = await Module({
+      locateFile: () => new URL('./vendor/qpdf/qpdf.wasm', self.location.href).href,
       noInitialRun: true,
       printErr: (s) => { stderr += s + '\n'; },
     });

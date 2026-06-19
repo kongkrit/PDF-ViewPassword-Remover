@@ -46,7 +46,7 @@ function doUnlock() {
   const reader = new FileReader();
   reader.onload = ({ target: { result } }) => {
     const bytes = new Uint8Array(result);
-    const worker = new Worker('./worker.js', { type: 'module' });
+    const worker = new Worker('./worker.js');
 
     worker.onmessage = ({ data }) => {
       busy = false;
